@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node --compiler-options {\"module\":\"commonjs\"} scripts/seed.ts"
+    "seed": "ts-node --project scripts/tsconfig.json scripts/seed.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

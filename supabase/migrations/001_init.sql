@@ -46,3 +46,9 @@ create policy "public access" on public.game_registry
 drop policy if exists "public access" on public.game_content;
 create policy "public access" on public.game_content
   for all using (true) with check (true);
+
+-- Table-level grants for the anon (and authenticated) roles. Supabase does not
+-- always auto-grant these for tables created in the SQL editor, and RLS policies
+-- only apply once the role has the underlying privilege.
+grant select, insert, update, delete on public.game_registry to anon, authenticated;
+grant select, insert, update, delete on public.game_content  to anon, authenticated;
