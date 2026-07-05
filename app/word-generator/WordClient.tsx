@@ -13,13 +13,6 @@ interface WordResult {
   definition: string | null;
 }
 
-const TYPE_OPTIONS = [
-  { value: "any", label: "Any" },
-  { value: "noun", label: "Noun" },
-  { value: "verb", label: "Verb" },
-  { value: "adjective", label: "Adjective" },
-];
-
 const DIFFICULTY_OPTIONS = [
   { value: "any", label: "Any" },
   { value: "easy", label: "Easy" },
@@ -65,7 +58,6 @@ function ToggleRow({
 }
 
 export default function WordClient() {
-  const [type, setType] = useState("any");
   const [difficulty, setDifficulty] = useState("any");
   const [result, setResult] = useState<WordResult | null>(null);
   const [history, setHistory] = useState<WordResult[]>([]);
@@ -77,9 +69,7 @@ export default function WordClient() {
     setError(null);
     try {
       const res = await fetch(
-        `/api/word?type=${encodeURIComponent(type)}&difficulty=${encodeURIComponent(
-          difficulty
-        )}`
+        `/api/word?difficulty=${encodeURIComponent(difficulty)}`
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Something went wrong.");
@@ -98,12 +88,6 @@ export default function WordClient() {
   return (
     <>
       <div className="wg-filters">
-        <ToggleRow
-          label="Word Type"
-          options={TYPE_OPTIONS}
-          value={type}
-          onChange={setType}
-        />
         <ToggleRow
           label="Difficulty"
           options={DIFFICULTY_OPTIONS}

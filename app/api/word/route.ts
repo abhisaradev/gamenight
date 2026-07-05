@@ -23,11 +23,9 @@ const POS_LABEL: Record<string, string> = {
   adv: "adverb",
 };
 
-// Fetches a single random word from API Ninjas. `type` (noun/verb/adjective)
-// is passed straight through — API Ninjas supports it natively.
-async function fetchRandomWord(type: string, key: string): Promise<string | null> {
+// Fetches a single random word from API Ninjas.
+async function fetchRandomWord(key: string): Promise<string | null> {
   const url = new URL("https://api.api-ninjas.com/v1/randomword");
-  if (type && type !== "any") url.searchParams.set("type", type);
 
   const res = await fetch(url, {
     headers: { "X-Api-Key": key },
@@ -84,7 +82,6 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const type = (searchParams.get("type") || "any").toLowerCase();
   const difficulty = (searchParams.get("difficulty") || "any").toLowerCase();
 
   // Keep asking for words until one matches the requested difficulty. After
@@ -93,7 +90,7 @@ export async function GET(req: Request) {
   let attempts = 0;
   for (let attempt = 0; attempt < 5; attempt++) {
     attempts = attempt + 1;
-    const w = await fetchRandomWord(type, key);
+    const w = await fetchRandomWord(key);
     if (!w) continue;
     word = w;
     if (difficulty === "any" || difficultyFor(w) === difficulty) break;
@@ -112,7 +109,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     word,
-    type: type !== "any" ? type : pos ?? "word",
+    type: pos ?? "word",
     difficulty: difficultyFor(word),
     definition,
   });
