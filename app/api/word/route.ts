@@ -31,13 +31,7 @@ async function fetchRandomWord(key: string): Promise<string | null> {
     headers: { "X-Api-Key": key },
     cache: "no-store",
   });
-  // TEMP DEBUG: remove once Vercel error is diagnosed.
-  console.log(`[word][debug] randomword response status: ${res.status}`);
-  if (!res.ok) {
-    const body = await res.text();
-    console.log(`[word][debug] randomword error body: ${body}`);
-    return null;
-  }
+  if (!res.ok) return null;
 
   const data = await res.json();
   const w = Array.isArray(data?.word) ? data.word[0] : data?.word;
@@ -87,16 +81,12 @@ export async function GET(req: Request) {
   // Keep asking for words until one matches the requested difficulty. After
   // 5 tries we accept whatever we last got rather than fail.
   let word: string | null = null;
-  let attempts = 0;
   for (let attempt = 0; attempt < 5; attempt++) {
-    attempts = attempt + 1;
     const w = await fetchRandomWord(key);
     if (!w) continue;
     word = w;
     if (difficulty === "any" || difficultyFor(w) === difficulty) break;
   }
-  // TEMP DEBUG: remove once Vercel error is diagnosed.
-  console.log(`[word][debug] attempts made before exiting loop: ${attempts}`);
 
   if (!word) {
     return NextResponse.json(
