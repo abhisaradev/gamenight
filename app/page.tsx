@@ -35,6 +35,15 @@ export default async function HomePage() {
         <h1>🎲 Game Night</h1>
       </header>
       <div className="card-grid">
+        <Link
+          href="/word-generator"
+          className="game-card wide-card"
+          style={{ borderColor: "var(--accent4)" }}
+        >
+          <span className="emoji">🔤</span>
+          <span className="name">Word Generator</span>
+          <span className="count">Nouns · Verbs · Adjectives · Easy–Hard</span>
+        </Link>
         {games.map((g) => (
           <Link key={g.id} href={`/game/${g.id}`} className="game-card">
             <span className="emoji">{g.emoji}</span>

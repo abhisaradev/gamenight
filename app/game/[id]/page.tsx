@@ -58,6 +58,18 @@ export default async function GamePage({
         </>
       )}
 
+      {params.id === "password" && (
+        <div className="px-5 pt-3.5">
+          <Link
+            href="/word-generator"
+            className="btn w-full text-center block"
+            style={{ borderColor: "var(--accent4)", color: "var(--accent4)" }}
+          >
+            🔤 Need a word?
+          </Link>
+        </div>
+      )}
+
       <GameClient game={game} content={content} />
     </main>
   );
